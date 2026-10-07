@@ -1,6 +1,9 @@
 // COMSC 210 | Lab 22 | Yeji Kim
 
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
+
 using namespace std;
 
 const int MIN_NR = 10, MAX_NR = 99, MIN_LS = 5, MAX_LS = 20;
@@ -23,10 +26,14 @@ private:
 
 public:
     // constructor
-    DoublyLinkedList() { head = nullptr; tail = nullptr; }
+    DoublyLinkedList() { 
+        head = nullptr; 
+        tail = nullptr; 
+    }
 
     void push_back(int value) {
         Node* newNode = new Node(value);
+        
         if (!tail)  // if there's no tail, the list is empty
             head = tail = newNode;
         else {
@@ -38,6 +45,7 @@ public:
 
     void push_front(int value) {
         Node* newNode = new Node(value);
+
         if (!head)  // if there's no head, the list is empty
             head = tail = newNode;
         else {
@@ -60,6 +68,7 @@ public:
         }
 
         Node* temp = head;
+
         for (int i = 0; i < position && temp; ++i)
             temp = temp->next;
 
@@ -71,25 +80,31 @@ public:
 
         newNode->next = temp->next;
         newNode->prev = temp;
+
         if (temp->next)
             temp->next->prev = newNode;
         else
             tail = newNode; // Inserting at the end
+
         temp->next = newNode;
     }
 
-    void delete_node(int value) {
-        if (!head) return; // Empty list
+    void delete_val(int value) {
+        if (!head) 
+        return; // Empty list
 
         Node* temp = head;
+
         while (temp && temp->data != value)
             temp = temp->next;
 
-        if (!temp) return; // Value not found
+        if (!temp) 
+        return; // Value not found
 
         if (temp->prev) {
             temp->prev->next = temp->next;
-        } else {
+        } 
+        else {
             head = temp->next; // Deleting the head
         }
 
@@ -101,6 +116,58 @@ public:
 
         delete temp;
     }
+
+    void delete_pos(int position) {
+        if (position < 0) {
+            cout << "Position must be >= 0." << endl;
+            return;
+        }
+
+        Node* temp = head;
+
+        for(int i = 0; i < position && temp; ++i)
+            temp = temp->next;
+
+        if (!temp) {
+            cout << "Position exceeds list size. Node not deleted." << endl; 
+            return;
+        }
+
+        if (temp->prev) {
+            temp->prev->next = temp->next;
+        } 
+        else {
+            head = temp->next; // Deleting the head
+        }
+
+        if (temp->next) {
+            temp->next->prev = temp->prev;
+        } 
+        else {
+            tail = temp->prev; // Deleting the tail
+        }
+
+        delete temp;
+    }
+
+    void pop_front() {
+        if (!head)
+        return;
+    }
+
+    Node* temp = head;
+        
+    if (head == tail) { // Only one node
+        head = tail = nullptr;
+    } 
+    else {
+        head = head->next;
+        head->prev = nullptr;
+    }
+
+    delete temp;
+}
+
 
     void print() {
         Node* current = head;
